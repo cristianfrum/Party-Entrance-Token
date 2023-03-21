@@ -8,6 +8,8 @@ contract PartyEntranceToken is ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     event TokenEntryPurchased(address indexed receiver, address indexed buyer);
+    
+    ERC20 public token;
 
     constructor() ERC20("PartyEntranceToken", "PETK") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -15,17 +17,17 @@ contract PartyEntranceToken is ERC20, AccessControl {
     }
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
-        _mint(to, amount);
+        _mint(to, amount * 10 ** decimals());
     }
 
     function buyOneToken() public {
-        _burn(_msgSender(), 1);
+        _burn(_msgSender(), 1 * 10 ** decimals());
         emit TokenEntryPurchased(_msgSender(), _msgSender());
     }
 
     function buyOneTokenFrom(address account) public {
-        _spendAllowance(account, 1);
-        _burn(account, 1);
+        _spendAllowance(account, _msgSender(), 1 * 10 ** token.decimals());
+        _burn(account, 1 * 10 ** token.decimals());
         emit TokenEntryPurchased(_msgSender(), account);
     }
 }
