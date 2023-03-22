@@ -19,7 +19,7 @@ contract TokenSale {
         token = ERC20(_token);
     }
 
-    function purchaseACoffee() public payable {
+    function purchaseAnEntryTicket() public payable {
         require(msg.value >= tokenPriceInWei, "Not enough money sent");
         uint tokensToTransfer = msg.value / tokenPriceInWei;
         uint remainder = msg.value - tokensToTransfer * tokenPriceInWei;
